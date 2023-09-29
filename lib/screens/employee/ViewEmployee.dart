@@ -3,6 +3,7 @@ import 'package:businessprojects/helpers/ApiHandler.dart';
 import 'package:businessprojects/providers/EmployeeProvider.dart';
 import 'package:businessprojects/providers/ProductProvider.dart';
 import 'package:businessprojects/resources/UrlResources.dart';
+import 'package:businessprojects/screens/employee/EditEmployee.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
 
   getdata() async
   {
-    await provider!.viewemplyee();
+    await provider!.viewemplyee(context);
     // Uri url = Uri.parse(UrlResources.All_Employee);
     // var response = await http.get(url);
     // if(response.statusCode==200)
@@ -52,8 +53,8 @@ class _ViewEmployeeState extends State<ViewEmployee> {
     provider = Provider.of<EmployeeProvider>(context,listen: true);
     return Scaffold(
       appBar: AppBar(title: Text("ViewEmployee"),),
-      body: provider!.alldata==null?Center(child: CircularProgressIndicator()):ListView.builder(
-        itemCount: provider!.alldata!.length,
+      body: provider!.ealldata==null?Center(child: CircularProgressIndicator()):ListView.builder(
+        itemCount: provider!.ealldata!.length,
         itemBuilder: (context,index)
         {
           return Container(
@@ -71,36 +72,47 @@ class _ViewEmployeeState extends State<ViewEmployee> {
             ),
             child: Column(
               children: [
-                Text(provider!.alldata![index].ename.toString()),
-                Text(provider!.alldata![index].salary.toString()),
-                Text(provider!.alldata![index].gender.toString()),
-                Text(provider!.alldata![index].department.toString()),
+                Text(provider!.ealldata![index].ename.toString()),
+                Text(provider!.ealldata![index].salary.toString()),
+                Text(provider!.ealldata![index].gender.toString()),
+                Text(provider!.ealldata![index].department.toString()),
                 Row(
                   children: [
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () async{
 
-                        var eid = provider!.alldata![index].eid.toString();
+                        var eid = provider!.ealldata![index].eid.toString();
                         var parms = {
                           "eid":eid
                         };
+                        await provider!.Deleteemployee(context,parms);
 
-                        await ApiHandler.postRequest(UrlResources.Delete_Employee,body: parms).then((json){
-                            if(json["status"]=="true")
-                            {
-                              var message = json["message"].toString();
-                              var snackbar = SnackBar(content: Text(message),);
-                              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                              getdata();
-                            }
-                            else
-                            {
-                              var message = json["message"].toString();
-                              var snackbar = SnackBar(content: Text(message),);
-                              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                            }
-                        });
+                        if(provider!.isdelete)
+                          {
+                            var snackbar = SnackBar(content: Text(provider!.deletemsg),);
+                            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          }
+                        else
+                          {
+                            var snackbar = SnackBar(content: Text(provider!.deletemsg),);
+                            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          }
+                        // await ApiHandler.postRequest(UrlResources.Delete_Employee,body: parms).then((json){
+                        //     if(json["status"]=="true")
+                        //     {
+                        //       var message = json["message"].toString();
+                        //       var snackbar = SnackBar(content: Text(message),);
+                        //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        //       getdata();
+                        //     }
+                        //     else
+                        //     {
+                        //       var message = json["message"].toString();
+                        //       var snackbar = SnackBar(content: Text(message),);
+                        //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        //     }
+                        // });
                         // Uri url = Uri.parse(UrlResources.Delete_Employee);
                         // var parms = {
                         //   "eid":eid
@@ -123,6 +135,16 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                         //     ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         //   }
                         // }
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: (){
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => EditEmployee(
+                            obj: provider!.ealldata![index],
+                          ))
+                        );
                       },
                     ),
                   ],

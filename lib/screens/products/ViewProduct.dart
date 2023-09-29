@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:businessprojects/helpers/ApiHandler.dart';
 import 'package:businessprojects/resources/UrlResources.dart';
+import 'package:businessprojects/screens/products/EditProduct.dart';
 import 'package:businessprojects/screens/products/ViewProduct2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,29 +73,44 @@ class _ViewProductState extends State<ViewProduct> {
                       onPressed: () async{
 
                         var pid = provider!.alldata![index].pid.toString();
-
-                        Uri url = Uri.parse(UrlResources.DELETE_PRODUCT);
                         var params = {
                           "pid":pid
                         };
-                        var response = await http.post(url,body: params);
-                        if(response.statusCode==200)
-                        {
-                          var json = jsonDecode(response.body.toString());
-                          if(json["status"]=="true")
+
+                        await provider!.deleteproduct(context,params);
+
+                        if(provider!.isdelete)
                           {
-                            var message = json["message"].toString();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-                            getdata();
+                            print("Deleted success");
                           }
-                          else
+                        else
                           {
-                            var message = json["message"].toString();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                            print("Delete Fail");
                           }
-                        }
+
+
+
+
                       },
-                    ),  // delete
+                    ),  //
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () async{
+
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(builder: (context)=>EditProduct(
+                        //     obj: provider!.alldata![index],
+                        //   ))
+                        // );
+
+                        var pid = provider!.alldata![index].pid.toString();
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context)=>EditProduct(
+                              pid: pid,
+                            ))
+                        );
+                      },
+                    ),  //// delete
                   ],
                 ),
                 trailing: Padding(

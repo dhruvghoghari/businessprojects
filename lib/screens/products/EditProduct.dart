@@ -2,20 +2,26 @@ import 'dart:convert';
 import 'package:businessprojects/helpers/ApiHandler.dart';
 import 'package:businessprojects/providers/ProductProvider.dart';
 import 'package:businessprojects/resources/UrlResources.dart';
+import 'package:businessprojects/screens/products/ViewProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../models/Product.dart';
 
-class AddProduct extends StatefulWidget {
-  const AddProduct({Key? key}) : super(key: key);
+class EditProduct extends StatefulWidget {
+
+
+  var pid = "";
+  EditProduct({required this.pid});
+ // Products obj;
+ // EditProduct({required this.obj});
 
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<EditProduct> createState() => _EditProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _EditProductState extends State<EditProduct> {
 
   TextEditingController _name = TextEditingController();
   TextEditingController _price = TextEditingController();
@@ -23,27 +29,29 @@ class _AddProductState extends State<AddProduct> {
 
   ProductProvider? provider;
 
+  getdata() async
+  {
+    var params = {
+      "pid":widget.pid.toString()
+    };
+    await provider!.getsingledata(context,params);
+
+    _name.text = provider!.singleobj!.pname.toString();
+    _price.text = provider!.singleobj!.price.toString();
+    _quantity.text = provider!.singleobj!.qty.toString();
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // _name.text = widget.obj.pname.toString();
+    // _price.text = widget.obj.price.toString();
+    // _quantity.text = widget.obj.qty.toString();
     provider = Provider.of<ProductProvider>(context,listen: false);
+    getdata();
   }
-
- //
- // try
- //  {
- //  var x=10;
- //  var y=0;
- //  var result =  x / y;
- //  print(result);
- //  }
- //  catch()
- //  {
- //    print("Not devide by 0");
- //  }
-  //finally(){
-  // }
 
 
   @override
@@ -66,7 +74,7 @@ class _AddProductState extends State<AddProduct> {
               ),
               Column(
                 children: [
-                  Text("Add Product ",style: TextStyle(
+                  Text("Edit Product ",style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
                   ),)
@@ -135,48 +143,21 @@ class _AddProductState extends State<AddProduct> {
                     var params= {
                       "pname":nm,
                       "qty":qty,
-                      "price":price
+                      "price":price,
+                      "pid":widget.pid
                     };
-
-                    await provider!.addproduct(context,params);
-
-                    if(provider!.isinserted)
+                    await  provider!.updateproduct(context,params);
+                    if(provider!.isupdate)
                       {
-                          var snackbar = SnackBar(content: Text(provider!.insertmessage));
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        Navigator.of(context).pop();
+                        var snackbar = SnackBar(content: Text(provider!.insertdmessage),);
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
                       }
                     else
                       {
-                        var snackbar = SnackBar(content: Text(provider!.insertmessage));
+                        var snackbar = SnackBar(content: Text(provider!.insertdmessage),);
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                       }
-                            _name.text="";
-                            _quantity.text="";
-                            _price.text="";
-
-
-                    // Uri url = Uri.parse(UrlResources.ADD_PRODUCT);
-                    //
-                    // var response = await http.post(url,body: params);
-                    // if(response.statusCode==200)
-                    //   {
-                    //     var json = jsonDecode(response.body.toString());
-                    //     if(json["status"]=="true")
-                    //       {
-                    //         var message = json["message"].toString();
-                    //         var snackbar = SnackBar(content: Text(message));
-                    //         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                    //         _name.text="";
-                    //         _quantity.text="";
-                    //         _price.text="";
-                    //       }
-                    //     else
-                    //       {
-                    //         var message = json["message"].toString();
-                    //         var snackbar = SnackBar(content: Text(message));
-                    //         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                    //       }
-                    //   }
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -186,7 +167,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                   ),
-                  child: Text("ADD ",style: TextStyle(
+                  child: Text("Update ",style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
                   ),),

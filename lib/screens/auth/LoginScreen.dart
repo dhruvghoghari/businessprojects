@@ -1,6 +1,10 @@
+import 'package:businessprojects/providers/AuthProvider.dart';
+import 'package:businessprojects/resources/StringResources.dart';
 import 'package:businessprojects/resources/StyleResources.dart';
 import 'package:businessprojects/widgets/PrimaryButton.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../others/HomePage.dart';
 import 'RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,12 +19,36 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _name = TextEditingController();
   TextEditingController _password = TextEditingController();
 
+  AuthProvider? provider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    provider = Provider.of<AuthProvider>(context,listen: false);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: (){
+                  },
+                ),
+                SizedBox(width: 100.0),
+                Text("Login ",style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold
+                ),)
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -58,8 +86,35 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20.0),
             PrimaryButton(
-              btntext: "Login",
-              onClick: (){},
+              btntext: StringResources.BTN_LOGIN_TEXT,
+              onClick: () async{
+
+                var name = _name.text.toString();
+                var password = _password.text.toString();
+
+                var params={
+                  "name":name,
+                  "password":password,
+                  "device_token":"12345678",
+                  "device_os":"android"
+                };
+
+                await provider!.checklogin(context,params);
+                if(provider!.islogin)
+                  {
+                    var snackbar = SnackBar(content: Text(provider!.loginmessage));
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage())
+                    );
+                  }
+                else
+                {
+                  var snackbar = SnackBar(content: Text(provider!.loginmessage));
+                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                }
+              },
             ),
             // GestureDetector(
             //   onTap: (){

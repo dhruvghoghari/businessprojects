@@ -1,8 +1,9 @@
 import 'package:businessprojects/screens/auth/LoginScreen.dart';
+import 'package:businessprojects/screens/auth/RegisterScreen.dart';
+import 'package:businessprojects/screens/others/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'HomeScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,7 +12,6 @@ class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
-
 class _SplashScreenState extends State<SplashScreen> {
 
   logindata() async
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       {
         Navigator.pop(context);
         Navigator.push(context,
-        MaterialPageRoute(builder: (context) => HomeScreen())
+        MaterialPageRoute(builder: (context) => HomePage())
         );
       }
     else

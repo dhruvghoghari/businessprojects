@@ -1,19 +1,26 @@
 import 'dart:convert';
 import 'package:businessprojects/helpers/ApiHandler.dart';
 import 'package:businessprojects/providers/EmployeeProvider.dart';
+import 'package:businessprojects/providers/ProductProvider.dart';
 import 'package:businessprojects/resources/UrlResources.dart';
+import 'package:businessprojects/screens/employee/EditEmployee.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import '../../models/Employee.dart';
+import 'package:flutter/material.dart';
 
-class AddEmploy extends StatefulWidget {
-  const AddEmploy({Key? key}) : super(key: key);
+class EditEmployee extends StatefulWidget {
+
+  Employee obj;
+  EditEmployee({required this.obj});
+
 
   @override
-  State<AddEmploy> createState() => _AddEmployState();
+  State<EditEmployee> createState() => _EditEmployeeState();
 }
 
-class _AddEmployState extends State<AddEmploy> {
+class _EditEmployeeState extends State<EditEmployee> {
 
   TextEditingController _name = TextEditingController();
   TextEditingController _salary = TextEditingController();
@@ -27,13 +34,17 @@ class _AddEmployState extends State<AddEmploy> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _name.text = widget.obj.ename.toString();
+    _salary.text = widget.obj.salary.toString();
+    gender = widget.obj.gender.toString();
+    department = widget.obj.department.toString();
+
+
     provider = Provider.of<EmployeeProvider>(context,listen: false);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<EmployeeProvider>(context,listen: true);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -57,7 +68,7 @@ class _AddEmployState extends State<AddEmploy> {
                           ),
                         ],
                       ),
-                      Text("Add Employ",style: TextStyle(
+                      Text("Edit Employee",style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold
                       ),),
@@ -183,81 +194,22 @@ class _AddEmployState extends State<AddEmploy> {
                               "salary":salary,
                               "department":department,
                               "gender":gender,
+                              "eid":widget.obj.eid
                             };
 
-                            await provider!.addemployee(context,params);
-
-                            if(provider!.isisnted)
+                            await provider!.updateEmployee(context,params);
+                            if(provider!.isupdate)
                               {
-                                var snackbar = SnackBar(
-                                    content: Text(provider!.isntedmessage));
+                                Navigator.of(context).pop();
+                                var snackbar = SnackBar(content: Text(provider!.insertdmessage),);
                                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
                               }
                             else
                               {
-                                var snackbar = SnackBar(
-                                    content: Text(provider!.isntedmessage));
+                                var snackbar = SnackBar(content: Text(provider!.insertdmessage),);
                                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
                               }
-                            _name.text="";
-                                _salary.text="";
-                                setState(() {
-                                  gender="f";
-                                  department="sale";
-                                });
 
-                            // await ApiHandler.postRequest(UrlResources.Add_Employee,body: params).then((json){
-                            //   if(json["status"]=="true")
-                            //     {
-                            //       var message = json["message"].toString();
-                            //       var snackbar = SnackBar(
-                            //           content: Text(message));
-                            //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                            //
-                            //       _name.text="";
-                            //       _salary.text="";
-                            //       setState(() {
-                            //         gender="f";
-                            //         department="sale";
-                            //       });
-                            //     }
-                            //     else
-                            //     {
-                            //       var message = json["message"].toString();
-                            //       var snackbar = SnackBar(
-                            //           content: Text(message));
-                            //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                            //     }
-                            // });
-                            // Uri url = Uri.parse(UrlResources.Add_Employee);
-                            //
-                            // var response = await http.post(url,body: params);
-                            // if(response.statusCode==200)
-                            // {
-                            //   var json = jsonDecode(response.body.toString());
-                            //   if(json["status"]=="true")
-                            //   {
-                            //     var message = json["message"].toString();
-                            //     var snackbar = SnackBar(
-                            //         content: Text(message));
-                            //     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                            //
-                            //     _name.text="";
-                            //     _salary.text="";
-                            //     setState(() {
-                            //       gender="f";
-                            //       department="sale";
-                            //     });
-                            //
-                            //   }
-                            //   else
-                            //   {
-                            //     var message = json["message"].toString();
-                            //     var snackbar = SnackBar(
-                            //         content: Text(message));
-                            //     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                            //   }
-                            // }
                           },
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -267,7 +219,7 @@ class _AddEmployState extends State<AddEmploy> {
                             ),
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                           ),
-                          child: Text("ADD ",style: TextStyle(
+                          child: Text("Update ",style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                           ),),

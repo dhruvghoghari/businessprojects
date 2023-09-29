@@ -7,8 +7,9 @@ import '../employee/ViewEmployee.dart';
 import '../products/ViewProduct.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
 
+  // HomeScreen obj;
+  // HomeScreen({required this.obj});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -53,6 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            // ListTile(
+            //   title: Text("Login"),
+            //   onTap: () {
+            //     Navigator.of(context).push(
+            //         MaterialPageRoute(builder: (context) => LoginScreen())
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

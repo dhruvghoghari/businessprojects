@@ -1,3 +1,4 @@
+import 'package:businessprojects/screens/auth/LoginScreen.dart';
 import 'package:businessprojects/widgets/PrimaryButton.dart';
 import 'package:flutter/material.dart';
 
@@ -112,7 +113,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 20.0),
                 PrimaryButton(
                   btntext: "Register",
-                  onClick: (){},
+                  onClick: (){
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen())
+                    );
+                  },
                 ),
                 // GestureDetector(
                 //   onTap: (){

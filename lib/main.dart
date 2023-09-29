@@ -1,3 +1,4 @@
+import 'package:businessprojects/providers/AuthProvider.dart';
 import 'package:businessprojects/providers/EmployeeProvider.dart';
 import 'package:businessprojects/providers/ProductProvider.dart';
 import 'package:businessprojects/screens/auth/LoginScreen.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context)=>ProductProvider()),
         ChangeNotifierProvider(create: (context)=>EmployeeProvider()),
+        ChangeNotifierProvider(create: (context)=>AuthProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
           useMaterial3: true,
         ),
-        home: HomeScreen(),
+        home: SplashScreen(),
       ),
     );
   }

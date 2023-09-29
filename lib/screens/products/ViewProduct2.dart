@@ -58,26 +58,18 @@ class _ViewProduct2State extends State<ViewProduct2> {
                       onPressed: () async{
 
                         var pid = provider!.alldata![index].pid.toString();
-
-                        Uri url = Uri.parse(UrlResources.DELETE_PRODUCT);
                         var params = {
                           "pid":pid
                         };
-                        var response = await http.post(url,body: params);
-                        if(response.statusCode==200)
-                        {
-                          var json = jsonDecode(response.body.toString());
-                          if(json["status"]=="true")
-                          {
-                            var message = json["message"].toString();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                        await provider!.deleteproduct(context,params);
 
-                          }
-                          else
-                          {
-                            var message = json["message"].toString();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-                          }
+                        if(provider!.isdelete)
+                        {
+                          print("Deleted success");
+                        }
+                        else
+                        {
+                          print("Delete Fail");
                         }
                       },
                     ),  // delete
