@@ -20,14 +20,9 @@ class ProductProvider extends ChangeNotifier
     {
       if(ex.message.toString()=="Internet Connection Failure")
       {
-        //Navigator.of(context)
         //rdirect to no internet page
       }
       else if(ex.message.toString()=="Bad Response Format")
-      {
-        //redirect to support page
-      }
-      else
       {
         //redirect to support page
       }
@@ -45,7 +40,6 @@ class ProductProvider extends ChangeNotifier
         {
           insertmessage = json["message"].toString();
           isinserted=true;
-
         }
         else
         {
