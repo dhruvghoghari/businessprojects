@@ -4,6 +4,7 @@ import '../helpers/ApiHandler.dart';
 import '../helpers/ErrorHandler.dart';
 import '../models/Product.dart';
 import '../resources/UrlResources.dart';
+
 class ProductProvider extends ChangeNotifier
 {
   List<Products>? alldata;
@@ -30,6 +31,7 @@ class ProductProvider extends ChangeNotifier
   }
 
 
+
   bool isinserted=false;
   var insertmessage="";
   addproduct(context,params) async{
@@ -52,19 +54,13 @@ class ProductProvider extends ChangeNotifier
     {
       if(ex.message.toString()=="Internet Connection Failure")
       {
-        //Navigator.of(context)
         //rdirect to no internet page
       }
       else if(ex.message.toString()=="Bad Response Format")
       {
         //redirect to support page
       }
-      else
-      {
-        //redirect to support page
-      }
     }
-
   }
 
   bool isdelete=false;

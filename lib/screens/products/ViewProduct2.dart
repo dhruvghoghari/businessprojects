@@ -8,12 +8,10 @@ import '../../models/Product.dart';
 import 'package:http/http.dart' as http;
 import '../../providers/ProductProvider.dart';
 class ViewProduct2 extends StatefulWidget {
-  const ViewProduct2({Key? key}) : super(key: key);
 
   @override
   State<ViewProduct2> createState() => _ViewProduct2State();
 }
-
 class _ViewProduct2State extends State<ViewProduct2> {
 
 

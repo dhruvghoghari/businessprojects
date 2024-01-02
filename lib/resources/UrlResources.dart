@@ -15,5 +15,7 @@ class UrlResources
 
   static String LOGIN = "https://begratefulapp.ca/api/login";
 
+  static String Get_Product = "https://dummyjson.com/products?limit=30";
+
 
 }

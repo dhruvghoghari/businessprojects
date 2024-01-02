@@ -16,7 +16,6 @@ class ViewProduct extends StatefulWidget {
   @override
   State<ViewProduct> createState() => _ViewProductState();
 }
-
 class _ViewProductState extends State<ViewProduct> {
 
 
@@ -87,10 +86,6 @@ class _ViewProductState extends State<ViewProduct> {
                           {
                             print("Delete Fail");
                           }
-
-
-
-
                       },
                     ),  //
                     IconButton(

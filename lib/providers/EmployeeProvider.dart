@@ -32,10 +32,6 @@ class EmployeeProvider extends ChangeNotifier
       {
         //redirect to support page
       }
-      else
-      {
-        //redirect to support page
-      }
     }
   }
 
