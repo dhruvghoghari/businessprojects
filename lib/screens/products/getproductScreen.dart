@@ -13,48 +13,46 @@ class getproductScreen extends StatefulWidget {
 class _getproductScreenState extends State<getproductScreen> {
 
   GetProduct? provider;
-  getdata() async
-  {
+
+  var selected="";
+
+  getdata() async {
     await provider!.mainProduct(context);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    provider = Provider.of<GetProduct>(context,listen: false);
+    provider = Provider.of<GetProduct>(context, listen: false);
     getdata();
   }
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<GetProduct>(context,listen: true);
-
+    provider = Provider.of<GetProduct>(context, listen: true);
     return Scaffold(
-      appBar: AppBar(title: Text("getProductScreen"),),
-      body: (provider!.allData==null)?Center(child: CircularProgressIndicator(),):ListView.builder(
-        itemCount: provider!.allData!.length,
-        itemBuilder: (context,index)
-          {
-            return ListTile(
-              title: Text(provider!.allData![index].title.toString()),
-              subtitle:
-              Column(
-                children: [
-                  Image.network(provider!.allData![index].thumbnail.toString()),
-                  Text(provider!.allData![index].description.toString()),
-                  Row(
-                    children: [
-                      Text(provider!.allData![index].price.toString()),
-                      Text(provider!.allData![index].discountPercentage.toString()),
-                    ],
-                  ),
-                  Text(provider!.allData![index].brand.toString()),
-                  Text(provider!.allData![index].category.toString()),
-                ],
-              ),
-            );
-          }
+      appBar: AppBar(
+        title: Text("getProductScreen"),
+      ),
+      body:Column(
+        children: [
+          Container(
+            child: DropdownButton(
+              onChanged: (val){
+                setState(() {
+                  selected=val!;
+                });
+              },
+              value: selected,
+              items: provider!.allData!.map((obj){
+                return DropdownMenuItem(
+                  child: Text(provider!.allData!.first.id.toString()),
+                  value: obj.title.toString(),
+                );
+              }).toList(),
+            ),
+          )
+        ],
       )
     );
   }
